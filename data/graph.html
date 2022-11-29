@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+    <div id='abf6b0ed5-f82b-4c0f-94b5-476572a30d9c' style='width:960px; height:500px'></div>
+    <style>
+    .node circle { fill: gray; }
+    .node text { font: 10px sans-serif;
+         text-anchor: middle;
+         fill: white; }
+    line.link { stroke: gray;
+        stroke-width: 1.5px; }
+    </style>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script>
+    var width = 960, height = 500;
+    var svg = d3.select("#abf6b0ed5-f82b-4c0f-94b5-476572a30d9c").append("svg")
+    .attr("width", width).attr("height", height);
+    var nodes = [{id:4},{id:6},{id:2},{id:1},{id:3},{id:7}];
+    var links = [{source:nodes[3],target:nodes[2]},{source:nodes[2],target:nodes[3]},{source:nodes[0],target:nodes[3]},{source:nodes[1],target:nodes[4]},{source:nodes[4],target:nodes[5]},{source:nodes[1],target:nodes[5]},{source:nodes[5],target:nodes[4]},{source:nodes[5],target:nodes[1]}];
+    var link = svg.selectAll(".link").data(links);
+    link.enter().insert("line", ".node").attr("class", "link").attr("marker-end", "url(#triangle)");
+     svg.append("svg:defs").append("svg:marker")
+         .attr("id", "triangle")
+         .attr("refX", 27)
+         .attr("refY", 6)
+         .attr("markerWidth", 20)
+         .attr("markerHeight", 20)
+         .attr("markerUnits","userSpaceOnUse")
+         .attr("orient", "auto")
+         .append("path")
+         .attr("d", "M 0 0 12 6 0 12 8 6")
+         .style("fill", "black");
+     var node = svg.selectAll(".node").data(nodes);
+     var nodeEnter = node.enter().append("g").attr("class", "node")
+     nodeEnter.append("circle").attr("r", 15);
+     nodeEnter.append("text").attr("dy", "0.35em")
+      .text(function(d) { return d.id; });
+     d3.layout.force().linkDistance(100).charge(-100).chargeDistance(200)
+     .friction(0.2).linkStrength(0.3).size([width, height])
+     .on("tick", function() {
+     link.attr("x1", function(d) { return d.source.x; })
+       .attr("y1", function(d) { return d.source.y; })
+       .attr("x2", function(d) { return d.target.x; })
+       .attr("y2", function(d) { return d.target.y; });
+     node.attr("transform", function(d) {
+     return "translate(" + d.x + "," + d.y + ")";
+     });
+     }).nodes(nodes).links(links).start();
+    </script>
+    </body>
+    </html>
+   
