@@ -38,7 +38,7 @@ object PageRankGOT {
     // Join the ranks with the usernames
     val ranksByUsername = (users join ranks).map {
       case (id, (username, rank)) => (username, rank)
-    }.sortBy(_._2)
+    }.sortBy(-_._2)
 
     // This creates html file where is graph visualized
     drawGraph(graph, users)
